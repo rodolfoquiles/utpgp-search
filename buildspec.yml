@@ -1,0 +1,30 @@
+version: 0.2
+phases:
+   install: 
+      python: 3.12
+   commands: 
+      - echo "Install phase..."
+   pre_build:
+   commands:
+      - echo "Pre-build clean..."
+      - rm -rf build dist
+      - mkdir -p build/pdttotxt build/upload_to_search dist
+   build:
+      commands:
+         - echo "Building pdttotxt..."
+         - pip install -r lambdas/pdttotxt/requirements.txt -t build/pdttotxt
+         - cp lambdas/pdttotxt/lambda_function.py build/pdttotxt/
+         - (cd build/pdttotxt && zip -r ../../dist/pdttotxt.zip .)
+         - echo "Building upload_to_search..."
+         - pip install -r lambdas/upload_to_search/requirements.txt -t build/upload_to_search
+         - cp lambdas/upload_to_search/lambda_function.py build/upload_to_search/
+         - (cd build/upload_to_search && zip -r ../../dist/upload_to_search.zip .)
+   post_build:
+      commands: 
+         - echo "Build complete. Artifacts are in dist/"
+
+artifacts:
+   files:
+      - dist/pdttotxt.zip
+      - dist/upload_to_search.zip
+   base-directory: .
