@@ -3,48 +3,48 @@ Transform: AWS::Serverless-2016-10-31
 Description: Two Lambda functions for the UTPGP search engine.
 
 Parameters:
-   CodeBucket:
-      Type: String
-      Description: S3 bucket containing Lambda zip artifacts
-   PdttotxtKey:
-      Type: String
-      Description: Object key for pdttotxt.zip
-   UploadToSearchKey:
-      Type: String
-      Description: Object key for upload_to_search.zip
-   LambdaRoleArn:
-      Type: String
-      Description: Execution role ARN to attach to both functions
+  CodeBucket:
+    Type: String
+    Description: S3 bucket containing Lambda zip artifacts
+  PdttotxtKey:
+    Type: String
+    Description: Object key for pdttotxt.zip
+  UploadToSearchKey:
+    Type: String
+    Description: Object key for upload_to_search.zip
+  LambdaRoleArn:
+    Type: String
+    Description: Execution role ARN to attach to both functions
 
 Globals:
-   Function:
-      Runtime: python3.12
-      Timeout: 180
-      MemorySize: 256
+  Function:
+    Runtime: python3.12
+    Timeout: 180
+    MemorySize: 256
 
 Resources:
-   PdttotxtFunction:
-      Type: AWS::Serverless::Function
-      Properties:
-         FunctionName: pdttotxt
-         CodeURi:
-            Bucket: !Ref CodeBucket
-            Key: !Ref PdttotxtKey
-         Handler: lambda_function.lambda_handler
-         Role: !Ref LambdaRoleArn
+  PdttotxtFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: pdttotxt
+      CodeUri:
+        Bucket: !Ref CodeBucket
+        Key: !Ref PdttotxtKey
+      Handler: lambda_function.lambda_handler
+      Role: !Ref LambdaRoleArn
 
-UploadToSearchFunction:
-   Type: AWS::Serverless::Function
-   Properties:
+  UploadToSearchFunction:
+    Type: AWS::Serverless::Function
+    Properties:
       FunctionName: upload-to-search
       CodeUri:
-         Bucket: !Ref CodeBucket
-         Key: !Ref UploadToSearchKey
+        Bucket: !Ref CodeBucket
+        Key: !Ref UploadToSearchKey
       Handler: lambda_function.lambda_handler
       Role: !Ref LambdaRoleArn
 
 Outputs:
-   PdttotxtFunctionName:
-      Value: !Ref PdttotxtFunction
-   UploadToSearchFunctionName:
-      Value: !Ref UploadToSearchFunction
+  PdttotxtFunctionName:
+    Value: !Ref PdttotxtFunction
+  UploadToSearchFunctionName:
+    Value: !Ref UploadToSearchFunction
